@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  TIDB_CLOUD_USER: 2ZCqU9LNTnbJc1u.root
+  TIDB_CLOUD_USER: ATdxUdpxyHudHMJ.root
   TIDB_CLOUD_HOST: gateway01.us-west-2.prod.aws.tidbcloud.com
 
 jobs:
