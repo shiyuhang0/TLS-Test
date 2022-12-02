@@ -1,7 +1,7 @@
 import java.sql.*;
 
-public class TLS_JAVA throws ClassNotFoundException {
-  public static void main(String args[]){
+public class TLS_JAVA {
+  public static void main(String args[]) throws ClassNotFoundException {
     if(args.length !=3) {
       throw new Error("Usage: java TLS_JAVA <host> <port> <database>");
     }
