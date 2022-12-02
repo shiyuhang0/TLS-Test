@@ -1,0 +1,38 @@
+name: TLS Test
+
+on:
+  schedule:
+    - cron: "0 16 * * *"  # 16:00 UTC every day
+  workflow_dispatch:
+
+env:
+  TIDB_CLOUD_USER: 2TRCXxFNzVHNYFN.root
+  TIDB_CLOUD_HOST: gateway01.ap-southeast-1.prod.aws.tidbcloud.com
+
+jobs:
+  mysql:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        include:
+          - os: ubuntu-latest
+            cert: /etc/ssl/certs/ca-certificates.crt
+          - os: macos-latest
+            cert: /etc/ssl/cert.pem
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Get mysql
+        uses: shogo82148/actions-setup-mysql@v1
+
+      - name: Run test on mac and ubuntu
+        if: ${{ matrix.os != 'windows-latest' }}
+        run: mysql --connect-timeout 15 -u $TIDB_CLOUD_USER -h $TIDB_CLOUD_HOST -P 4000 -D test --ssl-mode=VERIFY_IDENTITY --ssl-ca=${{ matrix.cert }} -p ${{ secrets.TIDB_CLOUD_PASSWORD}}
+
+      - name: Run test on windows
+      - if: ${{ matrix.os == 'windows-latest' }}
+        run: mysql --connect-timeout 15 -u $TIDB_CLOUD_USER -h $TIDB_CLOUD_HOST -P 4000 -D test --ssl-mode=VERIFY_IDENTITY -p ${{ secrets.TIDB_CLOUD_PASSWORD}}
+
+
