@@ -71,7 +71,7 @@ jobs:
           distribution: 'adopt'
           java-version: '8'
       - name: Run test on ${{ matrix.os }}
-        run: ｜
+        run: |
           cd example_code/java
           javac TLS_JAVA.java
           java -Djava.ext.dirs=. TLS_JAVA ${{env.TIDB_CLOUD_USER}} ${{env.TIDB_CLOUD_HOST}} ${{ secrets.TIDB_CLOUD_PASSWORD}}
