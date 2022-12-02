@@ -10,54 +10,54 @@ env:
   TIDB_CLOUD_HOST: gateway01.us-west-2.prod.aws.tidbcloud.com
 
 jobs:
-#  mysql:
-#    strategy:
-#      matrix:
-#        os: [ ubuntu-latest, windows-latest, macos-latest ]
-#        include:
-#          - os: ubuntu-latest
-#            cert: /etc/ssl/certs/ca-certificates.crt
-#          - os: macos-latest
-#            cert: /etc/ssl/cert.pem
-#          - os: windows-latest
-#            cert: ./.github/workflows/x1.pem
-#    runs-on: ${{ matrix.os }}
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#
-#      - name: Get mysql
-#        uses: shogo82148/actions-setup-mysql@v1
-#
-#      - name: Run test on ${{ matrix.os }}
-#        run: mysql --connect-timeout 15 -u ${{env.TIDB_CLOUD_USER}} -h ${{env.TIDB_CLOUD_HOST}} -P 4000 -D test --ssl-mode=VERIFY_IDENTITY --ssl-ca=${{ matrix.cert }} -p${{ secrets.TIDB_CLOUD_PASSWORD }}
-#
-#
-#  mycli:
-#    strategy:
-#      matrix:
-#        os: [ ubuntu-latest, windows-latest, macos-latest ]
-#        include:
-#          - os: ubuntu-latest
-#            cert: /etc/ssl/certs/ca-certificates.crt
-#          - os: macos-latest
-#            cert: /etc/ssl/cert.pem
-#          - os: windows-latest
-#            cert: ./.github/workflows/x1.pem
-#    runs-on: ${{ matrix.os }}
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#
-#      - name: Install python
-#        uses: actions/setup-python@v3
-#
-#      - name: Install mycli
-#        run: pip3 install mycli
-#
-#      - name: Run test on ${{ matrix.os }}
-#        run:
-#          mycli -u ${{env.TIDB_CLOUD_USER}} -h ${{env.TIDB_CLOUD_HOST}} -P 4000 -D test --ssl-ca=${{ matrix.cert }} --ssl-verify-server-cert -p${{ secrets.TIDB_CLOUD_PASSWORD}}
+  mysql:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        include:
+          - os: ubuntu-latest
+            cert: /etc/ssl/certs/ca-certificates.crt
+          - os: macos-latest
+            cert: /etc/ssl/cert.pem
+          - os: windows-latest
+            cert: .\.github\workflows\x1.pem
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Get mysql
+        uses: shogo82148/actions-setup-mysql@v1
+
+      - name: Run test on ${{ matrix.os }}
+        run: mysql --connect-timeout 15 -u ${{env.TIDB_CLOUD_USER}} -h ${{env.TIDB_CLOUD_HOST}} -P 4000 -D test --ssl-mode=VERIFY_IDENTITY --ssl-ca=${{ matrix.cert }} -p${{ secrets.TIDB_CLOUD_PASSWORD }}
+
+
+  mycli:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        include:
+          - os: ubuntu-latest
+            cert: /etc/ssl/certs/ca-certificates.crt
+          - os: macos-latest
+            cert: /etc/ssl/cert.pem
+          - os: windows-latest
+            cert: .\.github\workflows\x1.pem
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install python
+        uses: actions/setup-python@v3
+
+      - name: Install mycli
+        run: pip3 install mycli
+
+      - name: Run test on ${{ matrix.os }}
+        run:
+          mycli -u ${{env.TIDB_CLOUD_USER}} -h ${{env.TIDB_CLOUD_HOST}} -P 4000 -D test --ssl-ca=${{ matrix.cert }} --ssl-verify-server-cert -p${{ secrets.TIDB_CLOUD_PASSWORD}}
 
   jdbc:
     strategy:
@@ -70,10 +70,20 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '8'
-      - name: Run test on ${{ matrix.os }}
+      - name: Run test on ubuntu or macos
+        if: ${{ matrix.os != 'windows-latest' }}
         run: |
           cd example_code/java
           javac TLS_JAVA.java
           java -cp mysql-connector-j-8.0.31.jar: TLS_JAVA ${{env.TIDB_CLOUD_USER}} ${{env.TIDB_CLOUD_HOST}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
+
+      - name: Run test on windows
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: |
+          cd example_code\java
+          javac TLS_JAVA.java
+          java -cp mysql-connector-j-8.0.31.jar: TLS_JAVA ${{env.TIDB_CLOUD_USER}} ${{env.TIDB_CLOUD_HOST}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
+      
+          
 
 
