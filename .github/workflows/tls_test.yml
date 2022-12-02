@@ -10,7 +10,7 @@ env:
   TIDB_CLOUD_HOST: gateway01.us-west-2.prod.aws.tidbcloud.com
 
 jobs:
-  mysql:
+#  mysql:
 #    strategy:
 #      matrix:
 #        os: [ ubuntu-latest, windows-latest, macos-latest ]
