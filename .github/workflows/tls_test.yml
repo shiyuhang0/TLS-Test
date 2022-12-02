@@ -6,8 +6,8 @@ on:
   workflow_dispatch:
 
 env:
-  TIDB_CLOUD_USER: 2TRCXxFNzVHNYFN.root
-  TIDB_CLOUD_HOST: gateway01.ap-southeast-1.prod.aws.tidbcloud.com
+  TIDB_CLOUD_USER: 2a2A3dh5kRV5oPo.root
+  TIDB_CLOUD_HOST: gateway01.us-west-2.prod.aws.tidbcloud.com
 
 jobs:
   mysql:
@@ -58,3 +58,18 @@ jobs:
       - name: Run test on ${{ matrix.os }}
         run:
           mycli -u ${{env.TIDB_CLOUD_USER}} -h ${{env.TIDB_CLOUD_HOST}} -P 4000 -D test --ssl-ca=${{ matrix.cert }} --ssl-verify-server-cert -p${{ secrets.TIDB_CLOUD_PASSWORD}}
+
+  jdbc:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+      - run: ｜
+          cd example_code/java
+          javac  TLS_JAVA.java
+          java -cp mysql-connector-j-8.0.31.jar: TLS_JAVA ${{env.TIDB_CLOUD_USER}} ${{env.TIDB_CLOUD_HOST}} ${{ secrets.TIDB_CLOUD_PASSWORD}}
+
+
