@@ -114,18 +114,34 @@ jobs:
 #          cd example_code/python
 #          python3 TLS.py ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{ matrix.cert }}
 
-  go:
+#  go:
+#    strategy:
+#      matrix:
+#        os: [ ubuntu-latest, windows-latest, macos-latest ]
+#    runs-on: ${{ matrix.os }}
+#    steps:
+#      - uses: actions/checkout@v3
+#      - uses: actions/setup-go@v3
+#        with:
+#          go-version: '1.17.0'
+#      - name: Run test on ${{ matrix.os }}
+#        run: |
+#          cd example_code/go
+#          go mod tidy
+#          go run TLS.go ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
+
+  node:
     strategy:
       matrix:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-go@v3
-        with:
-          go-version: '1.17.0'
+      - uses: actions/setup-node@v3
+         with:
+          node-version: 16
       - name: Run test on ${{ matrix.os }}
         run: |
-          cd example_code/go
-          go mod tidy
-          go run TLS.go ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
+          cd example_code/node
+          npm install --save mysql2
+          node TLS.js ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
