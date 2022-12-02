@@ -21,9 +21,6 @@ jobs:
             cert: /etc/ssl/cert.pem
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
       - name: Get mysql
         uses: shogo82148/actions-setup-mysql@v1
 
@@ -33,4 +30,28 @@ jobs:
 
       - name: Run test on windows
         if: ${{ matrix.os == 'windows-latest' }}
-        run: mysql --connect-timeout 15 -u ${{env.TIDB_CLOUD_USER}} -h ${{env.TIDB_CLOUD_HOST}} -P 4000 -D test --ssl-mode=VERIFY_IDENTITY -p${{ secrets.TIDB_CLOUD_PASSWORD}}
+        run: mysql --connect-timeout 15 -u ${{env.TIDB_CLOUD_USER}} -h ${{env.TIDB_CLOUD_HOST}} -P 4000 -D test -p${{ secrets.TIDB_CLOUD_PASSWORD}}
+
+
+  mycli:
+    matrix:
+      os: [ ubuntu-latest, windows-latest, macos-latest ]
+      include:
+        - os: ubuntu-latest
+          cert: /etc/ssl/certs/ca-certificates.crt
+        - os: macos-latest
+          cert: /etc/ssl/cert.pem
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Install python
+        uses: actions/setup-python@v3
+
+      - name: Install mycli
+        run: pip3 install mycli
+
+      - name: Run test
+        run: |
+          if [[ ${{ matrix.os }} != 'windows-latest' ]]; then
+            mycli -u ${{env.TIDB_CLOUD_USER}} -h ${{env.TIDB_CLOUD_HOST}} -P 4000 -D test --ssl-ca=${{ matrix.cert }} --ssl-verify-server-cert -p${{ secrets.TIDB_CLOUD_PASSWORD}}
+          else
+            mycli -u ${{env.TIDB_CLOUD_USER}} -h ${{env.TIDB_CLOUD_HOST}} -P 4000 -D test -p${{ secrets.TIDB_CLOUD_PASSWORD}}
