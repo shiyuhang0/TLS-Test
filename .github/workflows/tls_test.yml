@@ -42,17 +42,17 @@ jobs:
             cert: /etc/ssl/certs/ca-certificates.crt
           - os: macos-latest
             cert: /etc/ssl/cert.pem
-      runs-on: ${{ matrix.os }}
-      steps:
-        - name: Install python
-          uses: actions/setup-python@v3
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Install python
+        uses: actions/setup-python@v3
 
-        - name: Install mycli
-          run: pip3 install mycli
+      - name: Install mycli
+        run: pip3 install mycli
 
-        - name: Run test
-          run: |
-            if [[ ${{ matrix.os }} != 'windows-latest' ]]; then
-              mycli -u ${{env.TIDB_CLOUD_USER}} -h ${{env.TIDB_CLOUD_HOST}} -P 4000 -D test --ssl-ca=${{ matrix.cert }} --ssl-verify-server-cert -p${{ secrets.TIDB_CLOUD_PASSWORD}}
-            else
-              mycli -u ${{env.TIDB_CLOUD_USER}} -h ${{env.TIDB_CLOUD_HOST}} -P 4000 -D test -p${{ secrets.TIDB_CLOUD_PASSWORD}}
+      - name: Run test
+        run: |
+          if [[ ${{ matrix.os }} != 'windows-latest' ]]; then
+            mycli -u ${{env.TIDB_CLOUD_USER}} -h ${{env.TIDB_CLOUD_HOST}} -P 4000 -D test --ssl-ca=${{ matrix.cert }} --ssl-verify-server-cert -p${{ secrets.TIDB_CLOUD_PASSWORD}}
+          else
+            mycli -u ${{env.TIDB_CLOUD_USER}} -h ${{env.TIDB_CLOUD_HOST}} -P 4000 -D test -p${{ secrets.TIDB_CLOUD_PASSWORD}}
