@@ -138,7 +138,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
-         with:
+        with:
           node-version: 16
       - name: Run test on ${{ matrix.os }}
         run: |
