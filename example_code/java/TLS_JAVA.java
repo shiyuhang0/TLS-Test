@@ -20,10 +20,10 @@ public class TLS_JAVA {
           System.out.println("using db: " + rs.getString(1));
         }
       } catch (Exception e) {
-          throw e
+          throw e;
       }
     } catch (Exception e) {
-        throw e
+        throw e;
     }
   }
 }
