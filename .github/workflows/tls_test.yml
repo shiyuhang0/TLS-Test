@@ -32,7 +32,7 @@ jobs:
         run: mysql --connect-timeout 15 -u $TIDB_CLOUD_USER -h $TIDB_CLOUD_HOST -P 4000 -D test --ssl-mode=VERIFY_IDENTITY --ssl-ca=${{ matrix.cert }} -p ${{ secrets.TIDB_CLOUD_PASSWORD}}
 
       - name: Run test on windows
-      - if: ${{ matrix.os == 'windows-latest' }}
+        if: ${{ matrix.os == 'windows-latest' }}
         run: mysql --connect-timeout 15 -u $TIDB_CLOUD_USER -h $TIDB_CLOUD_HOST -P 4000 -D test --ssl-mode=VERIFY_IDENTITY -p ${{ secrets.TIDB_CLOUD_PASSWORD}}
 
 
