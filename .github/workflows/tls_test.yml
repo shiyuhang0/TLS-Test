@@ -99,13 +99,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
       - name: Install mysqlclient
         run: pip3 install mysqlclient
       - name: Run test on ${{ matrix.os }}
         run: |
           cd example_code/python
-          pip3 install mysqlclient
           python3 TLS.py ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{ matrix.cert }}
           
 
