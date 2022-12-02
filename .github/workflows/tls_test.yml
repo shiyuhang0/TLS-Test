@@ -19,18 +19,15 @@ jobs:
             cert: /etc/ssl/certs/ca-certificates.crt
           - os: macos-latest
             cert: /etc/ssl/cert.pem
+          - os: windows-latest
+            cert: .github/workflows/x1.pem
     runs-on: ${{ matrix.os }}
     steps:
       - name: Get mysql
         uses: shogo82148/actions-setup-mysql@v1
 
-      - name: Run test on mac and ubuntu
-        if: ${{ matrix.os != 'windows-latest' }}
-        run: mysql --connect-timeout 15 -u ${{env.TIDB_CLOUD_USER}} -h ${{env.TIDB_CLOUD_HOST}} -P 4000 -D test --ssl-mode=VERIFY_IDENTITY --ssl-ca=${{ matrix.cert }} -p${{ secrets.TIDB_CLOUD_PASSWORD}}
-
-      - name: Run test on windows
-        if: ${{ matrix.os == 'windows-latest' }}
-        run: mysql --connect-timeout 15 -u ${{env.TIDB_CLOUD_USER}} -h ${{env.TIDB_CLOUD_HOST}} -P 4000 -D test -p${{ secrets.TIDB_CLOUD_PASSWORD}}
+      - name: Run test on ${{ matrix.os }}
+        run: mysql --connect-timeout 15 -u ${{env.TIDB_CLOUD_USER}} -h ${{env.TIDB_CLOUD_HOST}} -P 4000 -D test --ssl-mode=VERIFY_IDENTITY --ssl-ca=${{ matrix.cert }} -p${{ secrets.TIDB_CLOUD_PASSWORD }}
 
 
   mycli:
@@ -42,6 +39,8 @@ jobs:
             cert: /etc/ssl/certs/ca-certificates.crt
           - os: macos-latest
             cert: /etc/ssl/cert.pem
+          - os: windows-latest
+            cert: .github/workflows/x1.pem
     runs-on: ${{ matrix.os }}
     steps:
       - name: Install python
@@ -50,10 +49,6 @@ jobs:
       - name: Install mycli
         run: pip3 install mycli
 
-      - name: Run test
-        run: |
-          if [[ ${{ matrix.os }} != 'windows-latest' ]]; then
-            mycli -u ${{env.TIDB_CLOUD_USER}} -h ${{env.TIDB_CLOUD_HOST}} -P 4000 -D test --ssl-ca=${{ matrix.cert }} --ssl-verify-server-cert -p${{ secrets.TIDB_CLOUD_PASSWORD}}
-          else
-            mycli -u ${{env.TIDB_CLOUD_USER}} -h ${{env.TIDB_CLOUD_HOST}} -P 4000 -D test -p${{ secrets.TIDB_CLOUD_PASSWORD}}
-          fi
+      - name: Run test on ${{ matrix.os }}
+        run:
+          mycli -u ${{env.TIDB_CLOUD_USER}} -h ${{env.TIDB_CLOUD_HOST}} -P 4000 -D test --ssl-ca=${{ matrix.cert }} --ssl-verify-server-cert -p${{ secrets.TIDB_CLOUD_PASSWORD}}
