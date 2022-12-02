@@ -104,7 +104,7 @@ jobs:
         run: pip3 install mysqlclient
       - name: Run test on ${{ matrix.os }}
         run: |
-          cd example_code/java
+          cd example_code/python
           pip3 install mysqlclient
           python3 TLS.py ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{ matrix.cert }}
           
