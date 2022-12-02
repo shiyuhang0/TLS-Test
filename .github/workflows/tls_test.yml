@@ -56,3 +56,4 @@ jobs:
             mycli -u ${{env.TIDB_CLOUD_USER}} -h ${{env.TIDB_CLOUD_HOST}} -P 4000 -D test --ssl-ca=${{ matrix.cert }} --ssl-verify-server-cert -p${{ secrets.TIDB_CLOUD_PASSWORD}}
           else
             mycli -u ${{env.TIDB_CLOUD_USER}} -h ${{env.TIDB_CLOUD_HOST}} -P 4000 -D test -p${{ secrets.TIDB_CLOUD_PASSWORD}}
+          fi
