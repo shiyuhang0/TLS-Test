@@ -88,14 +88,14 @@ jobs:
   python:
     strategy:
       matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        os: [ ubuntu-latest, macos-latest ]
         include:
           - os: ubuntu-latest
             cert: /etc/ssl/certs/ca-certificates.crt
           - os: macos-latest
             cert: /etc/ssl/cert.pem
-          - os: windows-latest
-            cert: ./.github/workflows/x1.pem
+#          - os: windows-latest
+#            cert: ./.github/workflows/x1.pem
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
