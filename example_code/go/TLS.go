@@ -12,8 +12,8 @@ import (
 func main() {
 
 	host := os.Args[0]
-	user := os.Args[0]
-	password := os.Args[0]
+	user := os.Args[1]
+	password := os.Args[2]
 
 	mysql.RegisterTLSConfig("tidb", &tls.Config{
 		MinVersion: tls.VersionTLS12,
