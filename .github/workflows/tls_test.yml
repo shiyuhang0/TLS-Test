@@ -104,7 +104,6 @@ jobs:
           python-version: '3.10'
       - name: Install mysqlclient
         run: |
-          pip3 install mysql
           pip3 install MySQL-Python
           pip3 install mysqlclient
       - name: Run test on ${{ matrix.os }}
