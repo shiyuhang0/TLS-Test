@@ -15,12 +15,16 @@ func main() {
 	user := os.Args[2]
 	password := os.Args[3]
 
+	println(host)
+	println(user)
+	println(password)
+
 	mysql.RegisterTLSConfig("tidb", &tls.Config{
 		MinVersion: tls.VersionTLS12,
 		ServerName: host,
 	})
 
-	db, err := sql.Open("mysql", fmt.Sprintf("%s:<%s>@tcp(%s:4000)/test?tls=tidb", user, password, host))
+	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:4000)/test?tls=tidb", user, password, host))
 	if err != nil {
 		log.Fatal("failed to connect database", err)
 	}
