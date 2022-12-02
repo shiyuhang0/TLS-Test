@@ -6,16 +6,21 @@ import (
 	"fmt"
 	"github.com/go-sql-driver/mysql"
 	"log"
+	"os"
 )
 
 func main() {
 
+	host := os.Args[0]
+	user := os.Args[0]
+	password := os.Args[0]
+
 	mysql.RegisterTLSConfig("tidb", &tls.Config{
 		MinVersion: tls.VersionTLS12,
-		ServerName: "gateway01.us-west-2.prod.aws.tidbcloud.com",
+		ServerName: host,
 	})
 
-	db, err := sql.Open("mysql", "2a2A3dh5kRV5oPo.root:<your_password>@tcp(gateway01.us-west-2.prod.aws.tidbcloud.com:4000)/test?tls=tidb")
+	db, err := sql.Open("mysql", fmt.Sprintf("%s:<%s>@tcp(%s:4000)/test?tls=tidb", user, password, host))
 	if err != nil {
 		log.Fatal("failed to connect database", err)
 	}

@@ -88,14 +88,14 @@ jobs:
   python:
     strategy:
       matrix:
-        os: [ ubuntu-latest, macos-latest ]
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
         include:
           - os: ubuntu-latest
             cert: /etc/ssl/certs/ca-certificates.crt
           - os: macos-latest
             cert: /etc/ssl/cert.pem
-#          - os: windows-latest
-#            cert: ./.github/workflows/x1.pem
+          - os: windows-latest
+            cert: ./x1.pem
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -113,5 +113,19 @@ jobs:
         run: |
           cd example_code/python
           python3 TLS.py ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{ matrix.cert }}
-          
 
+  go:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '>=1.17.0'
+      - name: Run test on ${{ matrix.os }}
+        run: |
+          cd example_code/go
+          go get github.com/go-sql-driver/mysql
+          go run TLS.go ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{ matrix.cert }}
