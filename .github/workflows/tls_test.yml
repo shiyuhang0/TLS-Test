@@ -19,7 +19,7 @@ jobs:
             cert: /etc/ssl/certs/ca-certificates.crt
           - os: macos-latest
             cert: /etc/ssl/cert.pem
-    runs-on: {{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -34,5 +34,3 @@ jobs:
       - name: Run test on windows
         if: ${{ matrix.os == 'windows-latest' }}
         run: mysql --connect-timeout 15 -u $TIDB_CLOUD_USER -h $TIDB_CLOUD_HOST -P 4000 -D test --ssl-mode=VERIFY_IDENTITY -p${{ secrets.TIDB_CLOUD_PASSWORD}}
-
-
