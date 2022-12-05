@@ -1,10 +1,10 @@
 <?php
-$host = argv[1];
-$username = argv[2];
-$password = argv[3];
+$host = $argv[1];
+$username = $argv[2];
+$password = $argv[3];
 $database = 'test';
 $port = 4000;
-$ca_root_path = argv[4];
+$ca_root_path = $argv[4];
 
 $mysqli = mysqli_init();
 $mysqli->ssl_set(NULL, NULL, $ca_root_path, NULL, NULL);
