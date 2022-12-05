@@ -8,7 +8,9 @@ connection = MySQLdb.connect(
   user=sys.argv[2],
   password=sys.argv[3],
   database="test",
-  ssl_ca = sys.argv[4],
+  ssl={
+    "ca": sys.argv[4]
+  }
 )
 
 with connection:
