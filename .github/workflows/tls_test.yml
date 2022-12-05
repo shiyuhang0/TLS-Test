@@ -68,7 +68,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-java@v3
         with:
-          distribution: 'oracle'
+          distribution: 'temurin'
           java-version: '8'
       - name: Run test on ubuntu or macos
         if: ${{ matrix.os != 'windows-latest' }}
