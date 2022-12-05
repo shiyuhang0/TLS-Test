@@ -82,8 +82,6 @@ jobs:
         # windows need to specify classpath to avoid `can load main class`. don't know why
         run: |
           cd example_code/java
-          echo $PATH
-          echo $JAVA_HOME
           javac TLS.java
           java -cp mysql-connector-j-8.0.31.jar；TLS ${{env.TIDB_CLOUD_USER}} ${{env.TIDB_CLOUD_HOST}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
 
