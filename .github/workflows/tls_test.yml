@@ -195,7 +195,7 @@ jobs:
 #          gem install mysql2
 #          ruby TLS.rb ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
 
-  php_mysli:
+  php_mysqli:
     strategy:
       matrix:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
@@ -212,6 +212,7 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
+          extensions: mysqliphp_mysqli.dll
       - name: Run test on ${{ matrix.os }}
         run: |
           cd example_code/php
