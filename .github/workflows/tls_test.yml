@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  TIDB_CLOUD_USER: ATdxUdpxyHudHMJ.root
+  TIDB_CLOUD_USER: 3UibbJWsxnZ1oYJ.root
   TIDB_CLOUD_HOST: gateway01.us-west-2.prod.aws.tidbcloud.com
 
 jobs:
@@ -190,21 +190,24 @@ jobs:
           gem install mysql2
           ruby TLS.rb ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
 
-#  php_mysli:
-#    strategy:
-#      matrix:
-#        os: [ ubuntu-latest, windows-latest, macos-latest ]
-#    runs-on: ${{ matrix.os }}
-#    steps:
-#      - uses: actions/checkout@v3
-#      - uses: shivammathur/setup-php@v2
-#        with:
-#          php-version: '8.1'
-#          extensions: imagick, swoole
-#      - name: Install mysql on macos
-#        run: brew install mysql
-#      - name: Run test on ${{ matrix.os }}
-#        run: |
-#          cd example_code/ruby
-#          gem install mysql2
-#          ruby TLS.rb ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
+  php_mysli:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        include:
+          - os: ubuntu-latest
+            cert: /etc/ssl/certs/ca-certificates.crt
+          - os: macos-latest
+            cert: /etc/ssl/cert.pem
+          - os: windows-latest
+            cert: ./x1.pem
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+      - name: Run test on ${{ matrix.os }}
+        run: |
+          cd example_code/php
+          php TLS.php ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} {{matrix.cert}}
