@@ -155,20 +155,20 @@ jobs:
 #          npm install --save mysql2
 #          node TLS.js ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
 
-  rust_mysql:
-    strategy:
-      matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ATiltedTree/setup-rust@v1
-        with:
-          rust-version: stable
-      - name: Run test on ${{ matrix.os }}
-        run: |
-          cd example_code/rust
-          cargo run ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
+#  rust_mysql:
+#    strategy:
+#      matrix:
+#        os: [ ubuntu-latest, windows-latest, macos-latest ]
+#    runs-on: ${{ matrix.os }}
+#    steps:
+#      - uses: actions/checkout@v3
+#      - uses: ATiltedTree/setup-rust@v1
+#        with:
+#          rust-version: stable
+#      - name: Run test on ${{ matrix.os }}
+#        run: |
+#          cd example_code/rust
+#          cargo run ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
 
   ruby_mysql2:
     strategy:
@@ -182,9 +182,29 @@ jobs:
           ruby-version: '3.0' # Not needed with a .ruby-version file
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Install mysql on macos
+        if: ${{ matrix.os == 'macos-latest' }}
         run: brew install mysql
       - name: Run test on ${{ matrix.os }}
         run: |
           cd example_code/ruby
           gem install mysql2
           ruby TLS.rb ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
+
+#  php_mysli:
+#    strategy:
+#      matrix:
+#        os: [ ubuntu-latest, windows-latest, macos-latest ]
+#    runs-on: ${{ matrix.os }}
+#    steps:
+#      - uses: actions/checkout@v3
+#      - uses: shivammathur/setup-php@v2
+#        with:
+#          php-version: '8.1'
+#          extensions: imagick, swoole
+#      - name: Install mysql on macos
+#        run: brew install mysql
+#      - name: Run test on ${{ matrix.os }}
+#        run: |
+#          cd example_code/ruby
+#          gem install mysql2
+#          ruby TLS.rb ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
