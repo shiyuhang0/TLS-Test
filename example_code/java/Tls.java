@@ -1,6 +1,6 @@
 import java.sql.*;
 
-public class TLS {
+public class Tls {
   public static void main(String args[]) throws Exception {
     if(args.length !=3) {
       throw new Error("Usage: java TLS_JAVA <host> <port> <database>");

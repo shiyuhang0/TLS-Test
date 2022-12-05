@@ -68,22 +68,22 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
+          distribution: 'adopt'
           java-version: '8'
-      - name: Run test on ubuntu or macos
-        if: ${{ matrix.os != 'windows-latest' }}
-        run: |
-          cd example_code/java
-          javac TLS.java
-          java -cp mysql-connector-j-8.0.31.jar: TLS ${{env.TIDB_CLOUD_USER}} ${{env.TIDB_CLOUD_HOST}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
+#      - name: Run test on ubuntu or macos
+#        if: ${{ matrix.os != 'windows-latest' }}
+#        run: |
+#          cd example_code/java
+#          javac TLS.java
+#          java -cp mysql-connector-j-8.0.31.jar: TLS ${{env.TIDB_CLOUD_USER}} ${{env.TIDB_CLOUD_HOST}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
 
       - name: Run test on windows
         if: ${{ matrix.os == 'windows-latest' }}
         # windows need to specify classpath to avoid `can load main class`. don't know why
         run: |
           cd example_code/java
-          javac TLS.java
-          java -cp ./mysql-connector-j-8.0.31.jar TLS ${{env.TIDB_CLOUD_USER}} ${{env.TIDB_CLOUD_HOST}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
+          javac Tls.java
+          java -cp ./mysql-connector-j-8.0.31.jar Tls ${{env.TIDB_CLOUD_USER}} ${{env.TIDB_CLOUD_HOST}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
 
 #  python_mysqlclient:
 #    strategy:
