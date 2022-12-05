@@ -5,9 +5,9 @@ public class TLS {
     if(args.length !=3) {
       throw new Error("Usage: java TLS_JAVA <host> <port> <database>");
     }
-    String user = "ATdxUdpxyHudHMJ.root";
-    String host = "gateway01.us-west-2.prod.aws.tidbcloud.com";
-    String password = "12345678";
+    String user = args[0];
+    String host = args[1];
+    String password = args[2];
     Class.forName("com.mysql.cj.jdbc.Driver");
     try {
       java.sql.Connection conn = DriverManager.getConnection(

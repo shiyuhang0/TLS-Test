@@ -70,12 +70,12 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '8'
-#      - name: Run test on ubuntu or macos
-#        if: ${{ matrix.os != 'windows-latest' }}
-#        run: |
-#          cd example_code/java
-#          javac TLS.java
-#          java -cp mysql-connector-j-8.0.31.jar: TLS ${{env.TIDB_CLOUD_USER}} ${{env.TIDB_CLOUD_HOST}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
+      - name: Run test on ubuntu or macos
+        if: ${{ matrix.os != 'windows-latest' }}
+        run: |
+          cd example_code/java
+          javac TLS.java
+          java -cp mysql-connector-j-8.0.31.jar: TLS ${{env.TIDB_CLOUD_USER}} ${{env.TIDB_CLOUD_HOST}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
 
       - name: Run test on windows
         if: ${{ matrix.os == 'windows-2019' }}
@@ -85,7 +85,7 @@ jobs:
           echo $PATH
           echo $JAVA_HOME
           javac TLS.java
-          java -cp mysql-connector-j-8.0.31.jar； TLS
+          java -cp mysql-connector-j-8.0.31.jar；TLS ${{env.TIDB_CLOUD_USER}} ${{env.TIDB_CLOUD_HOST}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
 
 #  python_mysqlclient:
 #    strategy:
