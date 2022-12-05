@@ -10,55 +10,55 @@ env:
   TIDB_CLOUD_HOST: gateway01.us-west-2.prod.aws.tidbcloud.com
 
 jobs:
-#  mysql:
-#    strategy:
-#      matrix:
-#        os: [ ubuntu-latest, windows-latest, macos-latest ]
-#        include:
-#          - os: ubuntu-latest
-#            cert: /etc/ssl/certs/ca-certificates.crt
-#          - os: macos-latest
-#            cert: /etc/ssl/cert.pem
-#          - os: windows-latest
-#            cert: ./.github/workflows/x1.pem
-#    runs-on: ${{ matrix.os }}
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#
-#      - name: Get mysql
-#        uses: shogo82148/actions-setup-mysql@v1
-#
-#      - name: Run test on ${{ matrix.os }}
-#        run: mysql --connect-timeout 15 -u ${{env.TIDB_CLOUD_USER}} -h ${{env.TIDB_CLOUD_HOST}} -P 4000 -D test --ssl-mode=VERIFY_IDENTITY --ssl-ca=${{ matrix.cert }} -p${{ secrets.TIDB_CLOUD_PASSWORD }}
-#
-#
-#  mycli:
-#    strategy:
-#      matrix:
-#        os: [ ubuntu-latest, windows-latest, macos-latest ]
-#        include:
-#          - os: ubuntu-latest
-#            cert: /etc/ssl/certs/ca-certificates.crt
-#          - os: macos-latest
-#            cert: /etc/ssl/cert.pem
-#          - os: windows-latest
-#            cert: ./.github/workflows/x1.pem
-#    runs-on: ${{ matrix.os }}
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#
-#      - name: Install python
-#        uses: actions/setup-python@v3
-#
-#      - name: Install mycli
-#        run: pip3 install mycli
-#
-#      - name: Run test on ${{ matrix.os }}
-#        run:
-#          mycli -u ${{env.TIDB_CLOUD_USER}} -h ${{env.TIDB_CLOUD_HOST}} -P 4000 -D test --ssl-ca=${{ matrix.cert }} --ssl-verify-server-cert -p${{ secrets.TIDB_CLOUD_PASSWORD}}
-#
+  mysql:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        include:
+          - os: ubuntu-latest
+            cert: /etc/ssl/certs/ca-certificates.crt
+          - os: macos-latest
+            cert: /etc/ssl/cert.pem
+          - os: windows-latest
+            cert: ./.github/workflows/x1.pem
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Get mysql
+        uses: shogo82148/actions-setup-mysql@v1
+
+      - name: Run test on ${{ matrix.os }}
+        run: mysql --connect-timeout 15 -u ${{env.TIDB_CLOUD_USER}} -h ${{env.TIDB_CLOUD_HOST}} -P 4000 -D test --ssl-mode=VERIFY_IDENTITY --ssl-ca=${{ matrix.cert }} -p${{ secrets.TIDB_CLOUD_PASSWORD }}
+
+
+  mycli:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        include:
+          - os: ubuntu-latest
+            cert: /etc/ssl/certs/ca-certificates.crt
+          - os: macos-latest
+            cert: /etc/ssl/cert.pem
+          - os: windows-latest
+            cert: ./.github/workflows/x1.pem
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install python
+        uses: actions/setup-python@v3
+
+      - name: Install mycli
+        run: pip3 install mycli
+
+      - name: Run test on ${{ matrix.os }}
+        run:
+          mycli -u ${{env.TIDB_CLOUD_USER}} -h ${{env.TIDB_CLOUD_HOST}} -P 4000 -D test --ssl-ca=${{ matrix.cert }} --ssl-verify-server-cert -p${{ secrets.TIDB_CLOUD_PASSWORD}}
+
   java_jdbc:
     strategy:
       matrix:
@@ -79,78 +79,78 @@ jobs:
 
       - name: Run test on windows
         if: ${{ matrix.os == 'windows-latest' }}
-        # windows need to specify classpath to avoid `can load main class`. don't know why
+        # Need to use Chinese semicolon and an extra space before TLS （don't know why）
         run: |
           cd example_code/java
           javac TLS.java
-          java -cp mysql-connector-j-8.0.31.jar;  TLS ${{env.TIDB_CLOUD_USER}} ${{env.TIDB_CLOUD_HOST}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
+          java -cp mysql-connector-j-8.0.31.jar； TLS ${{env.TIDB_CLOUD_USER}} ${{env.TIDB_CLOUD_HOST}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
 
-#  python_mysqlclient:
-#    strategy:
-#      matrix:
-#        os: [ ubuntu-latest, windows-latest, macos-latest ]
-#        include:
-#          - os: ubuntu-latest
-#            cert: /etc/ssl/certs/ca-certificates.crt
-#          - os: macos-latest
-#            cert: /etc/ssl/cert.pem
-#          - os: windows-latest
-#            cert: ./x1.pem
-#    runs-on: ${{ matrix.os }}
-#    steps:
-#      - uses: actions/checkout@v3
-#      - uses: actions/setup-python@v4
-#        with:
-#          python-version: '3.10'
-#      - name: Run test on macos
-#        if: ${{ matrix.os == 'macos-latest' }}
-#        run: |
-#          brew install mysql
-#          export PATH=$PATH:/usr/local/mysql/bin
-#          pip3 install mysqlclient
-#          cd example_code/python
-#          python3 TLS.py ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{ matrix.cert }}
-#      - name: Run test on ubuntu
-#        if: ${{ matrix.os == 'ubuntu-latest' }}
-#        run: |
-#          pip3 install mysqlclient
-#          cd example_code/python
-#          python3 TLS.py ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{ matrix.cert }}
-#      - name: Run test on windows
-#        if: ${{ matrix.os == 'windows-latest' }}
-#        run: |
-#          pip3 install mysqlclient
-#          cd example_code/python
-#          python3 TLS_windows.py ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{ matrix.cert }}
-#
-#  go_godriver:
-#    strategy:
-#      matrix:
-#        os: [ ubuntu-latest, windows-latest, macos-latest ]
-#    runs-on: ${{ matrix.os }}
-#    steps:
-#      - uses: actions/checkout@v3
-#      - uses: actions/setup-go@v3
-#        with:
-#          go-version: '1.17.0'
-#      - name: Run test on ${{ matrix.os }}
-#        run: |
-#          cd example_code/go
-#          go mod tidy
-#          go run TLS.go ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
-#
-#  node_mysql2:
-#    strategy:
-#      matrix:
-#        os: [ ubuntu-latest, windows-latest, macos-latest ]
-#    runs-on: ${{ matrix.os }}
-#    steps:
-#      - uses: actions/checkout@v3
-#      - uses: actions/setup-node@v3
-#        with:
-#          node-version: 16
-#      - name: Run test on ${{ matrix.os }}
-#        run: |
-#          cd example_code/node
-#          npm install --save mysql2
-#          node TLS.js ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
+  python_mysqlclient:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        include:
+          - os: ubuntu-latest
+            cert: /etc/ssl/certs/ca-certificates.crt
+          - os: macos-latest
+            cert: /etc/ssl/cert.pem
+          - os: windows-latest
+            cert: ./x1.pem
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Run test on macos
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: |
+          brew install mysql
+          export PATH=$PATH:/usr/local/mysql/bin
+          pip3 install mysqlclient
+          cd example_code/python
+          python3 TLS.py ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{ matrix.cert }}
+      - name: Run test on ubuntu
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: |
+          pip3 install mysqlclient
+          cd example_code/python
+          python3 TLS.py ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{ matrix.cert }}
+      - name: Run test on windows
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: |
+          pip3 install mysqlclient
+          cd example_code/python
+          python3 TLS_windows.py ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{ matrix.cert }}
+
+  go_godriver:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '1.17.0'
+      - name: Run test on ${{ matrix.os }}
+        run: |
+          cd example_code/go
+          go mod tidy
+          go run TLS.go ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
+
+  node_mysql2:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Run test on ${{ matrix.os }}
+        run: |
+          cd example_code/node
+          npm install --save mysql2
+          node TLS.js ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
