@@ -62,7 +62,7 @@ jobs:
   java_jdbc:
     strategy:
       matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        os: [ ubuntu-latest, windows-2019, macos-latest ]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -78,7 +78,7 @@ jobs:
 #          java -cp mysql-connector-j-8.0.31.jar: TLS ${{env.TIDB_CLOUD_USER}} ${{env.TIDB_CLOUD_HOST}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
 
       - name: Run test on windows
-        if: ${{ matrix.os == 'windows-latest' }}
+        if: ${{ matrix.os == 'windows-2019' }}
         # windows need to specify classpath to avoid `can load main class`. don't know why
         run: |
           cd example_code/java
