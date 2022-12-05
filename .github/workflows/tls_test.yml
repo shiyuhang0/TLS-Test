@@ -162,21 +162,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-rust@v1
-        with:
-          rust-version: stable
-      - name: Run test on ${{ matrix.os }}
-        run: |
-          cd example_code/rust
-          cargo run ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
-
-  ruby_mysql2:
-    strategy:
-      matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v3
       - uses: ATiltedTree/setup-rust@v1
         with:
           rust-version: stable
@@ -184,3 +169,18 @@ jobs:
         run: |
           cd example_code/rust
           cargo run ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
+
+#  ruby_mysql2:
+#    strategy:
+#      matrix:
+#        os: [ ubuntu-latest, windows-latest, macos-latest ]
+#    runs-on: ${{ matrix.os }}
+#    steps:
+#      - uses: actions/checkout@v3
+#      - uses: ATiltedTree/setup-rust@v1
+#        with:
+#          rust-version: stable
+#      - name: Run test on ${{ matrix.os }}
+#        run: |
+#          cd example_code/rust
+#          cargo run ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
