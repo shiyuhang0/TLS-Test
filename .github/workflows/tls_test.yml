@@ -215,4 +215,4 @@ jobs:
       - name: Run test on ${{ matrix.os }}
         run: |
           cd example_code/php
-          php TLS.php ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} {{matrix.cert}}
+          php TLS.php ${{env.TIDB_CLOUD_HOST}} ${{env.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{matrix.cert}}
