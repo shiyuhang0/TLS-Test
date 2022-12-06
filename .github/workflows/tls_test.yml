@@ -51,7 +51,7 @@ jobs:
         uses: shogo82148/actions-setup-mysql@v1
 
       - name: Run test on ${{ matrix.os }}
-        run: mysql --connect-timeout 15 -u ${{env.TIDB_CLOUD_USER}} -h ${{env.TIDB_CLOUD_HOST}} -P 4000 -D test --ssl-mode=VERIFY_IDENTITY --ssl-ca=${{ matrix.cert }} -p${{ secrets.TIDB_CLOUD_PASSWORD }}
+        run: mysql --connect-timeout 15 -u ${{jobs.setup.env.TIDB_CLOUD_USER}} -h ${{jobs.setup.env.TIDB_CLOUD_HOST}} -P 4000 -D test --ssl-mode=VERIFY_IDENTITY --ssl-ca=${{ matrix.cert }} -p${{ secrets.TIDB_CLOUD_PASSWORD }}
 
 
 #  mycli:
