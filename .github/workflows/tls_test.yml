@@ -17,16 +17,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up
+      - name: Get Connection Info
         run: |
+          # set up
           sudo apt install -y jq
           curl https://raw.githubusercontent.com/tidbcloud/tidbcloud-cli/main/install.sh | sh
           source /home/runner/.profile
           ticloud config create --profile-name tls --public-key ${{ secrets.TLS_PUBLIC_KEY }} --private-key ${{ secrets.TLS_PRIVATE_KEY }}
-
-
-      - name: Delete cluster
-        run: |
+          
+          # delete cluster if exists
           ticloud cluster list 1372813089206721319 -o json > cluster
           if [ $(jq '.total' cluster) == 1 ];
           then
@@ -34,13 +33,11 @@ jobs:
           ticloud cluster delete -p 1372813089206721319 -c $id --force;
           fi
 
-      - name: Create cluster
-        run: |
+          # create cluster
           ticloud cluster create --project-id 1372813089206721319 --cluster-name tls-test --cloud-provider AWS -r us-west-2 --root-password 12345678 --cluster-type SERVERLESS;
           ticloud cluster list 1372813089206721319 -o json > cluster
           echo "TIDB_CLOUD_USER=$(jq '.items[0].status.connection_strings.default_user' cluster)" >> $GITHUB_ENV
           echo "TIDB_CLOUD_HOST=$(jq '.items[0].status.connection_strings.standard.host' cluster)" >> $GITHUB_ENV
-    
 
     outputs:
       TiDB_CLOUD_USER: ${{ env.TIDB_CLOUD_USER }}
