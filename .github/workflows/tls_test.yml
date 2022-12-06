@@ -21,7 +21,8 @@ jobs:
         run: |
           sudo apt install -y jq
           curl https://raw.githubusercontent.com/tidbcloud/tidbcloud-cli/main/install.sh | sh
-          echo "install tidbcloud-cli success"
+          ticloud
+          echo "install tidbcloud-cli success"       
           ticloud config create --profile-name tls --public-key ${{ secrets.TLS_PUBLIC_KEY }} --private-key ${{ secrets.TLS_PRIVATE_KEY }}
           ticloud cluster list 1372813089206721319 -o json > cluster
           echo "TIDB_CLOUD_USER=$(jq '.items[0].status.connection_strings.default_user' cluster)" >> $GITHUB_ENV
