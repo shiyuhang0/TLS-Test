@@ -11,7 +11,7 @@ env:
   TIDB_CLOUD_PROJECTID: 1372813089206721319
 
 jobs:
-  create:
+  setup:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -27,6 +27,7 @@ jobs:
           echo "TIDB_CLOUD_HOST=$(jq '.items[0].status.connection_strings.standard.host' cluster)" >> $GITHUB_ENV
 
   mysql:
+    needs: setup
     strategy:
       matrix:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
