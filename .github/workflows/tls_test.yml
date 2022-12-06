@@ -21,7 +21,7 @@ jobs:
         run: |
           sudo apt install -y jq
           curl https://raw.githubusercontent.com/tidbcloud/tidbcloud-cli/main/install.sh | sh
-          ticloud
+          source /home/runner/.profile
           echo "install tidbcloud-cli success"       
           ticloud config create --profile-name tls --public-key ${{ secrets.TLS_PUBLIC_KEY }} --private-key ${{ secrets.TLS_PRIVATE_KEY }}
           ticloud cluster list 1372813089206721319 -o json > cluster
