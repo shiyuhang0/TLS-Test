@@ -38,30 +38,30 @@ jobs:
       TiDB_CLOUD_USER: ${{ env.TIDB_CLOUD_USER }}
       TiDB_CLOUD_HOST: ${{ env.TIDB_CLOUD_HOST }}
 
-  mysql:
-    needs: setup
-    strategy:
-      matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
-        include:
-          - os: ubuntu-latest
-            cert: /etc/ssl/certs/ca-certificates.crt
-          - os: macos-latest
-            cert: /etc/ssl/cert.pem
-          - os: windows-latest
-            cert: ./.github/workflows/x1.pem
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Get mysql
-        uses: shogo82148/actions-setup-mysql@v1
-
-      - name: Run test on ${{ matrix.os }}
-        run: mysql --connect-timeout 15 -u ${{needs.setup.outputs.TIDB_CLOUD_USER}} -h ${{needs.setup.outputs.TIDB_CLOUD_HOST}} -P 4000 -D test --ssl-mode=VERIFY_IDENTITY --ssl-ca=${{ matrix.cert }} -p${{ secrets.TIDB_CLOUD_PASSWORD }}
-
-
+#  mysql:
+#    needs: setup
+#    strategy:
+#      matrix:
+#        os: [ ubuntu-latest, windows-latest, macos-latest ]
+#        include:
+#          - os: ubuntu-latest
+#            cert: /etc/ssl/certs/ca-certificates.crt
+#          - os: macos-latest
+#            cert: /etc/ssl/cert.pem
+#          - os: windows-latest
+#            cert: ./.github/workflows/x1.pem
+#    runs-on: ${{ matrix.os }}
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v3
+#
+#      - name: Get mysql
+#        uses: shogo82148/actions-setup-mysql@v1
+#
+#      - name: Run test on ${{ matrix.os }}
+#        run: mysql --connect-timeout 15 -u ${{needs.setup.outputs.TIDB_CLOUD_USER}} -h ${{needs.setup.outputs.TIDB_CLOUD_HOST}} -P 4000 -D test --ssl-mode=VERIFY_IDENTITY --ssl-ca=${{ matrix.cert }} -p${{ secrets.TIDB_CLOUD_PASSWORD }}
+#
+#
 #  mycli:
 #    needs: setup
 #    strategy:
@@ -115,45 +115,45 @@ jobs:
 #          cd example_code/java
 #          javac TLS.java
 #          java -cp mysql-connector-j-8.0.31.jar； TLS ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
-#
-#  python_mysqlclient:
-#    needs: setup
-#    strategy:
-#      matrix:
-#        os: [ ubuntu-latest, windows-latest, macos-latest ]
-#        include:
-#          - os: ubuntu-latest
-#            cert: /etc/ssl/certs/ca-certificates.crt
-#          - os: macos-latest
-#            cert: /etc/ssl/cert.pem
-#          - os: windows-latest
-#            cert: ./x1.pem
-#    runs-on: ${{ matrix.os }}
-#    steps:
-#      - uses: actions/checkout@v3
-#      - uses: actions/setup-python@v4
-#        with:
-#          python-version: '3.10'
-#      - name: Run test on macos
-#        if: ${{ matrix.os == 'macos-latest' }}
-#        run: |
-#          brew install mysql
-#          export PATH=$PATH:/usr/local/mysql/bin
-#          pip3 install mysqlclient
-#          cd example_code/python
-#          python3 TLS.py ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{ matrix.cert }}
-#      - name: Run test on ubuntu
-#        if: ${{ matrix.os == 'ubuntu-latest' }}
-#        run: |
-#          pip3 install mysqlclient
-#          cd example_code/python
-#          python3 TLS.py ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{ matrix.cert }}
-#      - name: Run test on windows
-#        if: ${{ matrix.os == 'windows-latest' }}
-#        run: |
-#          pip3 install mysqlclient
-#          cd example_code/python
-#          python3 TLS_windows.py ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{ matrix.cert }}
+
+  python_mysqlclient:
+    needs: setup
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        include:
+          - os: ubuntu-latest
+            cert: /etc/ssl/certs/ca-certificates.crt
+          - os: macos-latest
+            cert: /etc/ssl/cert.pem
+          - os: windows-latest
+            cert: ./x1.pem
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Run test on macos
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: |
+          brew install mysql
+          export PATH=$PATH:/usr/local/mysql/bin
+          pip3 install mysqlclient
+          cd example_code/python
+          python3 TLS.py ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{ matrix.cert }}
+      - name: Run test on ubuntu
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: |
+          pip3 install mysqlclient
+          cd example_code/python
+          python3 TLS.py ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{ matrix.cert }}
+      - name: Run test on windows
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: |
+          pip3 install mysqlclient
+          cd example_code/python
+          python3 TLS_windows.py ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{ matrix.cert }}
 #
 #  go_godriver:
 #    needs: setup
