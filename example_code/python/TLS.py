@@ -11,7 +11,8 @@ kwargs["password"]=sys.argv[3]
 kwargs["database"]="test"
 kwargs["ssl"]={"ca": sys.argv[4]}
 if platform.system() != 'Windows':
-  kwargs['ssl_mode'] = "VERIFY_IDENTITY",
+  kwargs["ssl_mode"] = "VERIFY_IDENTITY"
+
 connection = MySQLdb.connect(**kwargs)
 
 with connection:
