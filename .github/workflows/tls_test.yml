@@ -153,7 +153,7 @@ jobs:
         run: |
           pip3 install mysqlclient
           cd example_code/python
-          python3 TLS_windows.py ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{ matrix.cert }}
+          python3 TLS.py ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{ matrix.cert }}
 #
 #  go_godriver:
 #    needs: setup
