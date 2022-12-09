@@ -1,18 +1,20 @@
 import MySQLdb
 import sys
+import platform
 
-connection = MySQLdb.connect(
-
-  host= sys.argv[1],
-  port=4000,
-  user=sys.argv[2],
-  password=sys.argv[3],
-  database="test",
-  ssl_mode="VERIFY_IDENTITY",
-  ssl={
+kwargs = {
+  "host": sys.argv[1],
+  "port": 4000,
+  "user": sys.argv[2],
+  "password": sys.argv[3],
+  "database": "test",
+  "ssl": {
     "ca": sys.argv[4]
   }
-)
+}
+if platform.system() != 'Windows':
+  kwargs['ssl_mode'] = "VERIFY_IDENTITY",
+connection = MySQLdb.connect(**kwargs)
 
 with connection:
   with connection.cursor() as cursor:
