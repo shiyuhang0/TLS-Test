@@ -2,7 +2,7 @@ import mysql.connector
 import sys
 
 connection = mysql.connector.connect(host=sys.argv[1],
-                                     user='${username}',
+                                     user=sys.argv[2],
                                      port= 4000,
                                      password = sys.argv[3],
                                      database = 'test',
