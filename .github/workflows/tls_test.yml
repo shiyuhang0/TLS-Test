@@ -29,7 +29,7 @@ jobs:
           fi
 
           # create cluster
-          ticloud cluster create --project-id 1372813089206721319 --cluster-name tls-test --cloud-provider AWS -r us-west-2 --root-password 12345678 --cluster-type SERVERLESS;
+          ticloud cluster create --project-id 1372813089206721319 --cluster-name tls-test --cloud-provider AWS -r us-east-1 --root-password 12345678 --cluster-type SERVERLESS;
           ticloud cluster list 1372813089206721319 -o json > cluster
           echo "TIDB_CLOUD_USER=$(jq '.items[0].status.connection_strings.default_user' cluster)" >> $GITHUB_ENV
           echo "TIDB_CLOUD_HOST=$(jq '.items[0].status.connection_strings.standard.host' cluster)" >> $GITHUB_ENV
