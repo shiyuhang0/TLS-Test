@@ -273,6 +273,7 @@ jobs:
           sudo apt install -y libmysqlclient-dev
           cd example_code/cpp
           g++ TLS.cpp -o test -I/usr/include/mysql -lmysqlclient
+          whereis mysql.h
           ./test ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{matrix.cert}}
 
 
