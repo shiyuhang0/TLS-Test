@@ -256,8 +256,6 @@ jobs:
             cert: /etc/ssl/certs/ca-certificates.crt
           - os: macos-latest
             cert: /etc/ssl/cert.pem
-          - os: windows-latest
-            cert: ../x1.pem
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -272,7 +270,7 @@ jobs:
       - name: Run test on ubuntu
         if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
-          apt install -y libmysqlclient-dev
+          sudo apt install -y libmysqlclient-dev
           cd example_code/cpp
           g++ TLS.cpp -o test -L/usr/local/mysql/lib -I/usr/local/mysql/include -lmysqlclient 
           ./test ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{matrix.cert}}
