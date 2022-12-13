@@ -1,7 +1,7 @@
 import pymysql
 import sys
 
-connection = pymysql.connector.connect(host=sys.argv[1],
+connection = pymysql.connect(host=sys.argv[1],
                                      user=sys.argv[2],
                                      port= 4000,
                                      password = sys.argv[3],
