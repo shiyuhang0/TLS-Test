@@ -265,6 +265,7 @@ jobs:
         run: |
           brew install mysql
           cd example_code/cpp
+          whereis mysql.h
           g++ TLS.cpp -o test -L/usr/local/mysql/lib -I/usr/local/mysql/include -lmysqlclient 
           ./test ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{matrix.cert}}
       - name: Run test on ubuntu
