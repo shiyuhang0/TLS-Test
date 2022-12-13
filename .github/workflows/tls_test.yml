@@ -277,70 +277,70 @@ jobs:
           ./test ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{matrix.cert}}
 
 
-#  python_sqlalchemy:
-#    needs: setup
-#    strategy:
-#      matrix:
-#        os: [ ubuntu-latest, windows-latest, macos-latest ]
-#        include:
-#          - os: ubuntu-latest
-#            cert: /etc/ssl/certs/ca-certificates.crt
-#          - os: macos-latest
-#            cert: /etc/ssl/cert.pem
-#          - os: windows-latest
-#            cert: ../x1.pem
-#    runs-on: ${{ matrix.os }}
-#    steps:
-#      - uses: actions/checkout@v3
-#      - uses: actions/setup-python@v4
-#        with:
-#          python-version: '3.10'
-#      - name: Install mysql in macos
-#        if: ${{ matrix.os == 'macos-latest' }}
-#        run: |
-#          brew install mysql
-#          export PATH=$PATH:/usr/local/mysql/bin
-#      - name: Run test on ${{ matrix.os }}
-#        if: ${{ matrix.os == 'ubuntu-latest' }}
-#        run: |
-#          pip3 install mysqlclient
-#          pip3 install sqlalchemy
-#          cd example_code/sqlalchemy
-#          python3 TLS.py ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{ matrix.cert }}
-#
-#
-#  go_gorm:
-#    needs: setup
-#    strategy:
-#      matrix:
-#        os: [ ubuntu-latest, windows-latest, macos-latest ]
-#    runs-on: ${{ matrix.os }}
-#    steps:
-#      - uses: actions/checkout@v3
-#      - uses: actions/setup-go@v3
-#        with:
-#          go-version: '1.17.0'
-#      - name: Run test on ${{ matrix.os }}
-#        run: |
-#          cd example_code/gorm
-#          go mod tidy
-#          go run TLS.go ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
-#
-#  node_sequelize:
-#    needs: setup
-#    strategy:
-#      matrix:
-#        os: [ ubuntu-latest, windows-latest, macos-latest ]
-#    runs-on: ${{ matrix.os }}
-#    steps:
-#      - uses: actions/checkout@v3
-#      - uses: actions/setup-node@v3
-#        with:
-#          node-version: 16
-#      - name: Run test on ${{ matrix.os }}
-#        run: |
-#          cd example_code/sequelize
-#          npm install --save mysql2
-#          npm install --save sequelize
-#          node TLS.js ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
+  python_sqlalchemy:
+    needs: setup
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        include:
+          - os: ubuntu-latest
+            cert: /etc/ssl/certs/ca-certificates.crt
+          - os: macos-latest
+            cert: /etc/ssl/cert.pem
+          - os: windows-latest
+            cert: ../x1.pem
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install mysql in macos
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: |
+          brew install mysql
+          export PATH=$PATH:/usr/local/mysql/bin
+      - name: Run test on ${{ matrix.os }}
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: |
+          pip3 install mysqlclient
+          pip3 install sqlalchemy
+          cd example_code/sqlalchemy
+          python3 TLS.py ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{ matrix.cert }}
+
+
+  go_gorm:
+    needs: setup
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '1.17.0'
+      - name: Run test on ${{ matrix.os }}
+        run: |
+          cd example_code/gorm
+          go mod tidy
+          go run TLS.go ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
+
+  node_sequelize:
+    needs: setup
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Run test on ${{ matrix.os }}
+        run: |
+          cd example_code/sequelize
+          npm install --save mysql2
+          npm install --save sequelize
+          node TLS.js ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
 
