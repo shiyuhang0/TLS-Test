@@ -263,12 +263,10 @@ jobs:
       - uses: actions/checkout@v3
       - uses: rlalik/setup-cpp-compiler@v1.2
       - name: Run test on ${{ matrix.os }}
-        env:
-          CXX: ${{ steps.install_cc.outputs.cxx }}
         run: |
           cd example_code/cpp
-          $CXX TLS.cpp -o test -L/usr/local/mysql/lib -I/usr/local/mysql/include -lmysqlclient 
-          test ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{matrix.cert}}
+          g++ TLS.cpp -o test -L/usr/local/mysql/lib -I/usr/local/mysql/include -lmysqlclient 
+          ./test ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{matrix.cert}}
 
 
   python_sqlalchemy:
@@ -297,6 +295,7 @@ jobs:
       - name: Run test on ${{ matrix.os }}
         if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
+          pip3 install mysqlclient
           pip3 install sqlalchemy
           cd example_code/sqlalchemy
           python3 TLS.py ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{ matrix.cert }}
