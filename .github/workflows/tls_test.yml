@@ -127,7 +127,7 @@ jobs:
           - os: macos-latest
             cert: /etc/ssl/cert.pem
           - os: windows-latest
-            cert: ./x1.pem
+            cert: ../x1.pem
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -164,7 +164,6 @@ jobs:
         with:
           python-version: '3.10'
       - name: Run test on ${{ matrix.os }}
-        if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
           pip3 install mysql-connector-python
           cd example_code/python
@@ -189,7 +188,6 @@ jobs:
         with:
           python-version: '3.10'
       - name: Run test on ${{ matrix.os }}
-        if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
           pip3 install pymysql
           cd example_code/python
