@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
     mysql_init(&mysql);
     mysql_options(&mysql, MYSQL_OPT_SSL_MODE, &ssl_mode);
     mysql_options(&mysql, MYSQL_OPT_SSL_CA, argv[4]);
-    conn = mysql_real_connect(&mysql, argv[1], argv[2], "12345678", "test", 4000, NULL, 0);
+    conn = mysql_real_connect(&mysql, argv[1], argv[2], "1234567", "test", 4000, NULL, 0);
 
     mysql_query(conn, "SHOW DATABASES");
     resultset = mysql_store_result(conn);
