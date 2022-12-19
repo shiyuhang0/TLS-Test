@@ -168,31 +168,31 @@ jobs:
 #          pip3 install mysql-connector-python
 #          cd example_code/python
 #          python3 mysql-connector-python.py ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{ matrix.cert }}
+#
+#  python_pymysql:
+#    needs: setup
+#    strategy:
+#      matrix:
+#        os: [ ubuntu-latest, windows-latest, macos-latest ]
+#        include:
+#          - os: ubuntu-latest
+#            cert: /etc/ssl/certs/ca-certificates.crt
+#          - os: macos-latest
+#            cert: /etc/ssl/cert.pem
+#          - os: windows-latest
+#            cert: ../x1.pem
+#    runs-on: ${{ matrix.os }}
+#    steps:
+#      - uses: actions/checkout@v3
+#      - uses: actions/setup-python@v4
+#        with:
+#          python-version: '3.10'
+#      - name: Run test on ${{ matrix.os }}
+#        run: |
+#          pip3 install pymysql
+#          cd example_code/python
+#          python3 pymysql_test.py ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{ matrix.cert }}
 
-  python_pymysql:
-    needs: setup
-    strategy:
-      matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
-        include:
-          - os: ubuntu-latest
-            cert: /etc/ssl/certs/ca-certificates.crt
-          - os: macos-latest
-            cert: /etc/ssl/cert.pem
-          - os: windows-latest
-            cert: ../x1.pem
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-      - name: Run test on ${{ matrix.os }}
-        run: |
-          pip3 install pymysql
-          cd example_code/python
-          python3 pymysql_test.py ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{ matrix.cert }}        
-          
 
 #
 #  go_godriver:
@@ -212,85 +212,85 @@ jobs:
 #          go mod tidy
 #          go run TLS.go ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
 #
-#  node_mysql2:
-#    needs: setup
-#    strategy:
-#      matrix:
-#        os: [ ubuntu-latest, windows-latest, macos-latest ]
-#    runs-on: ${{ matrix.os }}
-#    steps:
-#      - uses: actions/checkout@v3
-#      - uses: actions/setup-node@v3
-#        with:
-#          node-version: 16
-#      - name: Run test on ${{ matrix.os }}
-#        run: |
-#          cd example_code/node
-#          npm install --save mysql2
-#          node TLS.js ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
-#
-#  rust_mysql:
-#    needs: setup
-#    strategy:
-#      matrix:
-#        os: [ ubuntu-latest, windows-latest, macos-latest ]
-#    runs-on: ${{ matrix.os }}
-#    steps:
-#      - uses: actions/checkout@v3
-#      - uses: ATiltedTree/setup-rust@v1
-#        with:
-#          rust-version: stable
-#      - name: Run test on ${{ matrix.os }}
-#        run: |
-#          cd example_code/rust
-#          cargo run ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
-#
-#  ruby_mysql2:
-#    needs: setup
-#    strategy:
-#      matrix:
-#        os: [ ubuntu-latest, macos-latest ] # install mysql2 in windows is a little difficult, dismiss it for now
-#    runs-on: ${{ matrix.os }}
-#    steps:
-#      - uses: actions/checkout@v3
-#      - uses: ruby/setup-ruby@v1
-#        with:
-#          ruby-version: '3.0' # Not needed with a .ruby-version file
-#          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-#      - name: Install mysql on macos
-#        if: ${{ matrix.os == 'macos-latest' }}
-#        run: |
-#          brew install mysql
-#          cd example_code/ruby
-#          gem install mysql2
-#          ruby TLS.rb ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
-#      - name: Run test on ubuntu
-#        if: ${{ matrix.os == 'ubuntu-latest' }}
-#        run: |
-#          cd example_code/ruby
-#          gem install mysql2
-#          ruby TLS.rb ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
-#
-#  php_mysqli:
-#    needs: setup
-#    strategy:
-#      matrix:
-#        os: [ ubuntu-latest, windows-latest, macos-latest ]
-#        include:
-#          - os: ubuntu-latest
-#            cert: /etc/ssl/certs/ca-certificates.crt
-#          - os: macos-latest
-#            cert: /etc/ssl/cert.pem
-#          - os: windows-latest
-#            cert: ./x1.pem
-#    runs-on: ${{ matrix.os }}
-#    steps:
-#      - uses: actions/checkout@v3
-#      - uses: shivammathur/setup-php@v2
-#        with:
-#          php-version: '8.1'
-#          ini-values: extension=php_mysqli.dll
-#      - name: Run test on ${{ matrix.os }}
-#        run: |
-#          cd example_code/php
-#          php TLS.php ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{matrix.cert}}
+  node_mysql2:
+    needs: setup
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Run test on ${{ matrix.os }}
+        run: |
+          cd example_code/node
+          npm install --save mysql2
+          node TLS.js ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
+
+  rust_mysql:
+    needs: setup
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ATiltedTree/setup-rust@v1
+        with:
+          rust-version: stable
+      - name: Run test on ${{ matrix.os }}
+        run: |
+          cd example_code/rust
+          cargo run ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
+
+  ruby_mysql2:
+    needs: setup
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest ] # install mysql2 in windows is a little difficult, dismiss it for now
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0' # Not needed with a .ruby-version file
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: Install mysql on macos
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: |
+          brew install mysql
+          cd example_code/ruby
+          gem install mysql2
+          ruby TLS.rb ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
+      - name: Run test on ubuntu
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: |
+          cd example_code/ruby
+          gem install mysql2
+          ruby TLS.rb ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }}
+
+  php_mysqli:
+    needs: setup
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        include:
+          - os: ubuntu-latest
+            cert: /etc/ssl/certs/ca-certificates.crt
+          - os: macos-latest
+            cert: /etc/ssl/cert.pem
+          - os: windows-latest
+            cert: ./x1.pem
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          ini-values: extension=php_mysqli.dll
+      - name: Run test on ${{ matrix.os }}
+        run: |
+          cd example_code/php
+          php TLS.php ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{matrix.cert}}

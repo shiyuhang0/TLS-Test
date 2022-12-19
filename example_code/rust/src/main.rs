@@ -7,7 +7,7 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     let host = &args[1];
     let user = &args[2];
-    let password = &args[3];
+    let password = "1234567";
 
     let database_url = format!("mysql://{}:{}@{}:4000/test", &user, &password, &host);
 

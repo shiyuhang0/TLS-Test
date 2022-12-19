@@ -6,7 +6,7 @@ var connection = mysql.createConnection({
   host:  process.argv[2],
   port: 4000,
   user: process.argv[3],
-  password: process.argv[4],
+  password: '1234567',
   database: 'test',
   ssl: {
     minVersion: 'TLSv1.2',

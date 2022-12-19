@@ -8,7 +8,7 @@ begin
     client = Mysql2::Client.new(
         host: ARGV[0],
         username: ARGV[1],
-        password: ARGV[2],
+        password: "1234567",
         port: 4000,
         database: 'test',
         ssl_mode: :verify_ca,

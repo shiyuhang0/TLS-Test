@@ -1,7 +1,7 @@
 <?php
 $host = $argv[1];
 $username = $argv[2];
-$password = $argv[3];
+$password = '1234567';
 $database = 'test';
 $port = 4000;
 $ca_root_path = $argv[4];
