@@ -246,65 +246,65 @@ jobs:
 #          cd example_code/php
 #          php TLS.php ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{matrix.cert}}
 
-#  cpp_libmysqlclient:
-#    needs: setup
-#    strategy:
-#      matrix:
-#        os: [ ubuntu-latest, macos-latest ]
-#        include:
-#          - os: ubuntu-latest
-#            cert: /etc/ssl/certs/ca-certificates.crt
-#          - os: macos-latest
-#            cert: /etc/ssl/cert.pem
-#    runs-on: ${{ matrix.os }}
-#    steps:
-#      - uses: actions/checkout@v3
-#      - uses: rlalik/setup-cpp-compiler@v1.2
-#      - name: Run test on macos
-#        if: ${{ matrix.os == 'macos-latest' }}
-#        run: |
-#          brew install mysql
-#          cd example_code/cpp
-#          sudo find /usr -name mysql.h
-#          g++ TLS.cpp -o test -I/usr/local/include/mysql -lmysqlclient
-#          ./test ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{matrix.cert}}
-#      - name: Run test on ubuntu
-#        if: ${{ matrix.os == 'ubuntu-latest' }}
-#        run: |
-#          sudo apt install -y libmysqlclient-dev
-#          cd example_code/cpp
-#          g++ TLS.cpp -o test -I/usr/include/mysql -lmysqlclient
-#          ./test ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{matrix.cert}}
-
-
-  python_sqlalchemy:
+  cpp_libmysqlclient:
     needs: setup
     strategy:
       matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        os: [ ubuntu-latest, macos-latest ]
         include:
           - os: ubuntu-latest
             cert: /etc/ssl/certs/ca-certificates.crt
           - os: macos-latest
             cert: /etc/ssl/cert.pem
-          - os: windows-latest
-            cert: ../x1.pem
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-      - name: Install mysql in macos
+      - uses: rlalik/setup-cpp-compiler@v1.2
+      - name: Run test on macos
         if: ${{ matrix.os == 'macos-latest' }}
         run: |
           brew install mysql
-      - name: Run test on ${{ matrix.os }}
+          cd example_code/cpp
+          sudo find /usr -name mysql.h
+          g++ TLS.cpp -o test -I/usr/local/include/mysql -lmysqlclient
+          ./test ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{matrix.cert}}
+      - name: Run test on ubuntu
+        if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
-          pip3 install mysqlclient
-          pip3 install sqlalchemy
-          cd example_code/sqlalchemy
-          python3 TLS.py ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{ matrix.cert }}
+          sudo apt install -y libmysqlclient-dev
+          cd example_code/cpp
+          g++ TLS.cpp -o test -I/usr/include/mysql -lmysqlclient
+          ./test ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{matrix.cert}}
+
+
+#  python_sqlalchemy:
+#    needs: setup
+#    strategy:
+#      matrix:
+#        os: [ ubuntu-latest, windows-latest, macos-latest ]
+#        include:
+#          - os: ubuntu-latest
+#            cert: /etc/ssl/certs/ca-certificates.crt
+#          - os: macos-latest
+#            cert: /etc/ssl/cert.pem
+#          - os: windows-latest
+#            cert: ../x1.pem
+#    runs-on: ${{ matrix.os }}
+#    steps:
+#      - uses: actions/checkout@v3
+#      - uses: actions/setup-python@v4
+#        with:
+#          python-version: '3.10'
+#      - name: Install mysql in macos
+#        if: ${{ matrix.os == 'macos-latest' }}
+#        run: |
+#          brew install mysql
+#      - name: Run test on ${{ matrix.os }}
+#        run: |
+#          pip3 install mysqlclient
+#          pip3 install sqlalchemy
+#          cd example_code/sqlalchemy
+#          python3 TLS.py ${{needs.setup.outputs.TIDB_CLOUD_HOST}} ${{needs.setup.outputs.TIDB_CLOUD_USER}} ${{ secrets.TIDB_CLOUD_PASSWORD }} ${{ matrix.cert }}
 
 
 #  go_gorm:
